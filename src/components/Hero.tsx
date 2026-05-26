@@ -34,7 +34,7 @@ export function Hero() {
   }, [text, deleting, i]);
 
   return (
-    <section className="relative flex min-h-[90vh] items-center overflow-hidden px-4 pt-32 pb-16 md:pt-24">
+    <section className="relative flex min-h-[90vh] items-center overflow-hidden px-8 pt-32 pb-16 md:pt-24">
       <div className="absolute inset-0 bg-ambient" />
       <Particles count={70} />
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 md:grid-cols-2 md:gap-8">

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 type Msg = { role: "user" | "assistant"; content: string; streaming?: boolean };
 
@@ -81,7 +82,7 @@ export function AIHub() {
 
     try {
       // 2. Fire the post request to your FastAPI backend
-      const response = await fetch("https://update-portfolio-smoky.vercel.app/api/chat", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -189,7 +190,7 @@ export function AIHub() {
           <span className="text-foreground/90">I'll answer in real time.</span>
         </h1>
         <p className="mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
-          A mock agent wired into Ahzaz's portfolio. Function calls, tool routing, streaming responses — all simulated client-side.
+          A full-stack AI assistant powered by Gemini and a live FastAPI backend, featuring real-time stream delivery and true function-calling tools.
         </p>
       </motion.div>
 
@@ -272,6 +273,7 @@ export function AIHub() {
   );
 }
 
+
 function MsgBubble({ msg }: { msg: Msg }) {
   const isUser = msg.role === "user";
   return (
@@ -293,7 +295,10 @@ function MsgBubble({ msg }: { msg: Msg }) {
               <Dot /><Dot d={0.15} /><Dot d={0.3} />
             </span>
           ) : (
-            <span className={msg.streaming ? "blink-cursor" : ""}>{msg.content}</span>
+            // 🌟 Wrap the content inside ReactMarkdown instead of a plain span
+            <div className={`prose prose-invert max-w-none text-sm ${msg.streaming ? "blink-cursor" : ""}`}>
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
+            </div>
           )}
         </div>
       </motion.div>

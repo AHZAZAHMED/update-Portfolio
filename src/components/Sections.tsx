@@ -404,7 +404,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative px-4 py-32">
+    <section id="contact" className="relative px-4 py-8">
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">
           <SectionLabel>Contact</SectionLabel>
