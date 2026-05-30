@@ -30,8 +30,8 @@ client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=openrouter_api_key,
     default_headers={
-        "HTTP-Origin": "http://localhost:3000", # Optional: Your app URL for OpenRouter rankings
-        "X-Title": "Ahzaz Portfolio AI",        # Optional: Your app name
+        "HTTP-Origin": "http://localhost:3000",
+        "X-Title": "Ahzaz Portfolio AI", 
     }
 )
 
