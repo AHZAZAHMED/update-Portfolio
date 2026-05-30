@@ -1,6 +1,7 @@
 import { motion, type Variants } from "framer-motion";
 import { Github, ExternalLink, GraduationCap, Cpu, Brain, Code2, Server, Wand2, Mail, Copy, Check } from "lucide-react";
 import { useState } from "react";
+import { Mail, Copy, Check, Loader2 } from "lucide-react";
 
 const CONTACT_EMAIL = "ahzazahmed159@gmail.com";
 
@@ -380,9 +381,7 @@ export function Education() {
   );
 }
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Copy, Check, Loader2 } from "lucide-react"; // Added Loader2 for smooth UX spinning state
+
 
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -394,7 +393,7 @@ export function Contact() {
     setStatus("sending");
 
     try {
-      const response = await fetch(`${BACKEND_API_BASE}/api/contact`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
