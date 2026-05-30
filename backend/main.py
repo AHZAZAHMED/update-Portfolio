@@ -3,10 +3,11 @@ import json
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel , EmailStr
 from typing import List, Literal
 from dotenv import load_dotenv
 from openai import OpenAI
+import resend
 
 load_dotenv()
 

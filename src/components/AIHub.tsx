@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, FormEvent, ChangeEvent } from "react";
 import { ArrowDown, ArrowUp, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
@@ -78,8 +78,8 @@ export function AIHub() {
     setBusy(true);
 
     // Add an empty assistant placeholder for streaming tokens
-    setMessages((m) => [...m, { role: "assistant", content: "", streaming: true }]);
-
+    setMessages((m:Msg[]) => [...m, { role: "assistant", content: "", streaming: true }]);
+    console.log("Target API Host Destination Address:", import.meta.env.VITE_API_URL);
     try {
       // 2. Fire the post request to your FastAPI backend
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
@@ -125,7 +125,7 @@ export function AIHub() {
               completeResponseText += parsed.delta;
               
               // Keep updating the very last message in the array with new stream data
-              setMessages((m) => {
+              setMessages((m:Msg[]) => {
                 const copy = [...m];
                 if (copy.length > 0) {
                   copy[copy.length - 1] = {
@@ -145,7 +145,7 @@ export function AIHub() {
       }
 
       // Stream completed successfully -> Turn off cursor flash
-      setMessages((m) => {
+      setMessages((m:Msg[]) => {
         const copy = [...m];
         if (copy.length > 0) {
           copy[copy.length - 1] = {
@@ -159,7 +159,7 @@ export function AIHub() {
 
     } catch (error) {
       console.error("Error communicating with AI server:", error);
-      setMessages((m) => [
+      setMessages((m:Msg[]) => [
         ...m,
         { role: "assistant", content: "Sorry, I had trouble reaching my brain server. Please try again." }
       ]);
@@ -207,7 +207,7 @@ export function AIHub() {
               className="scrollbar-thin mb-3 max-h-[40vh] overflow-y-auto rounded-2xl bg-black/20 p-4"
             >
               <div className="space-y-4">
-                {messages.map((m, i) => (
+                {messages.map((m:Msg, i:number) => (
                   <MsgBubble key={i} msg={m} />
                 ))}
               </div>
@@ -215,7 +215,7 @@ export function AIHub() {
           )}
 
           <form
-            onSubmit={(e) => {
+            onSubmit={(e: FormEvent<HTMLFormElement>) => {
               e.preventDefault();
               send(input);
             }}
@@ -223,7 +223,7 @@ export function AIHub() {
           >
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
               placeholder="Ask anything about my work, skills, or projects..."
               className="flex-1 bg-transparent px-3 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
             />

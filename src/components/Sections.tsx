@@ -1,8 +1,6 @@
 import { motion, type Variants } from "framer-motion";
-import { Github, ExternalLink, GraduationCap, Cpu, Brain, Code2, Server, Wand2, Mail, Copy, Check } from "lucide-react";
+import { Github, ExternalLink, GraduationCap, Cpu, Brain, Code2, Server, Wand2, Mail, Copy, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { Mail, Copy, Check, Loader2 } from "lucide-react";
-
 const CONTACT_EMAIL = "ahzazahmed159@gmail.com";
 
 const fadeUp: Variants = {
