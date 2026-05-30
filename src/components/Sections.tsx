@@ -380,17 +380,38 @@ export function Education() {
   );
 }
 
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, Copy, Check, Loader2 } from "lucide-react"; // Added Loader2 for smooth UX spinning state
+
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Portfolio inquiry from ${form.name || "someone"}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
-    );
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    setStatus("sending");
+
+    try {
+      const response = await fetch(`${BACKEND_API_BASE}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to forward payload request across data layer.");
+      }
+
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" }); // Flush text values on validation success
+    } catch (err) {
+      console.error("API Pipeline Error:", err);
+      setStatus("error");
+    }
   };
 
   const copyEmail = async () => {
@@ -449,6 +470,7 @@ export function Contact() {
               name="name"
               value={form.name}
               onChange={(v) => setForm((f) => ({ ...f, name: v }))}
+              disabled={status === "sending"}
             />
             <FloatingField
               label="Email"
@@ -456,6 +478,7 @@ export function Contact() {
               type="email"
               value={form.email}
               onChange={(v) => setForm((f) => ({ ...f, email: v }))}
+              disabled={status === "sending"}
             />
           </div>
           <div className="mt-5">
@@ -465,16 +488,39 @@ export function Contact() {
               textarea
               value={form.message}
               onChange={(v) => setForm((f) => ({ ...f, message: v }))}
+              disabled={status === "sending"}
             />
           </div>
+
           <button
             type="submit"
-            className="mt-6 w-full rounded-2xl bg-[--neon] py-3.5 text-sm font-semibold text-[--neon] transition-transform hover:scale-[1.01] glow-shadow-strong"
+            disabled={status === "sending"}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[--neon] py-3.5 text-sm font-semibold text-[--neon] transition-all hover:scale-[1.01] disabled:opacity-50 disabled:pointer-events-none glow-shadow-strong"
           >
-            Send message
+            {status === "sending" ? (
+              <>
+                <Loader2 size={16} className="animate-spin text-black" />
+                <span>Dropping transmission...</span>
+              </>
+            ) : (
+              "Send message"
+            )}
           </button>
+
+          {/* Dynamic Transactional Status Banners */}
+          {status === "success" && (
+            <p className="mt-4 text-center text-sm font-medium text-[--neon]">
+              ✨ Transmission delivered successfully! I will reach out soon.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="mt-4 text-center text-sm font-medium text-red-400">
+              ⚠️ Server error routing payload. Please try manual copy fallback!
+            </p>
+          )}
+          
           <p className="mt-3 text-center text-[11px] text-muted-foreground">
-            Opens your email client and sends to {CONTACT_EMAIL}
+            Processes securely through serverless agent pipelines.
           </p>
         </motion.form>
 
@@ -493,6 +539,7 @@ function FloatingField({
   textarea,
   value,
   onChange,
+  disabled = false,
 }: {
   label: string;
   name: string;
@@ -500,11 +547,12 @@ function FloatingField({
   textarea?: boolean;
   value: string;
   onChange: (v: string) => void;
+  disabled?: boolean;
 }) {
   const [focus, setFocus] = useState(false);
   const active = focus || value.length > 0;
   const cls =
-    "peer w-full rounded-xl bg-white/[0.03] px-4 pt-6 pb-2 text-sm text-foreground ring-1 ring-white/10 transition-all focus:outline-none focus:ring-[--neon]/50 focus:shadow-[0_0_25px_rgba(0,255,174,0.15)]";
+    "peer w-full rounded-xl bg-white/[0.03] px-4 pt-6 pb-2 text-sm text-foreground ring-1 ring-white/10 transition-all focus:outline-none focus:ring-[--neon]/50 focus:shadow-[0_0_25px_rgba(0,255,174,0.15)] disabled:opacity-50 disabled:cursor-not-allowed";
   return (
     <div className="relative">
       {textarea ? (
@@ -516,6 +564,7 @@ function FloatingField({
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           className={cls + " resize-none"}
+          disabled={disabled}
           required
         />
       ) : (
@@ -527,6 +576,7 @@ function FloatingField({
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           className={cls}
+          disabled={disabled}
           required
         />
       )}
