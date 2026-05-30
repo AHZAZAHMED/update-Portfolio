@@ -25,6 +25,11 @@ openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 if not openrouter_api_key:
     raise ValueError("OPENROUTER_API_KEY is not set in the environment variables")
 
+# Initialize your API key from environment variables
+resend.api_key = os.getenv("RESEND_API_KEY")
+if not resend.api_key:
+    raise ValueError("RESEND_API_KEY is not set in the environment variables")
+
 # 1. Initialize OpenAI client pointing to OpenRouter
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
@@ -34,6 +39,41 @@ client = OpenAI(
     }
 )
 
+#contact
+class ContactForm(BaseModel):
+    name: str
+    email: EmailStr  # Requires: pip install pydantic[email]
+    message: str
+
+@app.post("/api/contact")
+async def send_portfolio_email(payload: ContactForm):
+    try:
+        # Construct the email layout
+        html_content = f"""
+        <h3>New Portfolio Inquiry</h3>
+        <p><strong>Name:</strong> {payload.name}</p>
+        <p><strong>Email:</strong> {payload.email}</p>
+        <br/>
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap;">{payload.message}</p>
+        """
+        
+        # Send via Resend's infrastructure
+        response = resend.Emails.send({
+            "from": "Portfolio Contact <onboarding@resend.dev>", # Resend provides this for sandbox testing
+            "to": os.getenv("CONTACT_EMAIL"), # Your personal email address
+            "subject": f"✨ New inquiry from {payload.name}",
+            "html": html_content
+        })
+        
+        return {"status": "success", "message_id": response.get("id")}
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to route email: {str(e)}"
+        )
+        
 # Define your live Vercel API tool
 def query_my_api() -> dict:
     import requests
