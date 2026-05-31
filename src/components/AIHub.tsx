@@ -79,7 +79,8 @@ export function AIHub() {
 
     // Add an empty assistant placeholder for streaming tokens
     setMessages((m:Msg[]) => [...m, { role: "assistant", content: "", streaming: true }]);
-    console.log("Target API Host Destination Address:", import.meta.env.VITE_API_URL);
+    
+    
     try {
       // 2. Fire the post request to your FastAPI backend
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {

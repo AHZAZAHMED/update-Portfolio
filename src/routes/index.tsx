@@ -45,6 +45,13 @@ function Index() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    // Pre-warm the backend on page load to avoid cold start delays
+    fetch(`${import.meta.env.VITE_API_URL}/docs`)
+      .then(() => console.log("✓ Backend pre-warmed successfully"))
+      .catch((err) => console.warn("Backend pre-warm skipped:", err));
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       {/* Ambient backdrop */}
