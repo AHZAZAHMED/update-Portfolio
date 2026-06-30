@@ -101,7 +101,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     history: List[ChatMessage]
 
-@app.get("/api/ping",methods=["GET", "HEAD"])
+@app.api_route("/api/ping",methods=["GET", "HEAD"])
 async def ping():
     return {"status" : "ok"}
 
