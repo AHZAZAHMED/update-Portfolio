@@ -101,6 +101,10 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     history: List[ChatMessage]
 
+@app.post("/api/ping")
+async def ping():
+    return {"status" : "ok"}
+
 @app.post("/api/chat")
 async def chat_endpoint(request: ChatRequest):
     # Standard baseline system prompt definition
