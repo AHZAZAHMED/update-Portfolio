@@ -159,7 +159,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       style={{ transform: hover ? "translateY(-4px) scale(1.005)" : "none" }}
     >
       <div
-        className={`pointer-events-none absolute inset-0 bg-gradient-to-br from-[--neon]/15 to-transparent opacity-60 transition-opacity duration-500 ${
+        className={`pointer-events-none absolute inset-0 bg-gradient-to-br-from-[--neon]/15 to-transparent opacity-60 transition-opacity duration-500 ${
           hover ? "opacity-100" : ""
         }`}
       />
@@ -189,7 +189,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.tags.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-[11px] text-muted-foreground"
+                className="rounded-full border border-white/10 bg-white/[3/100] px-2.5 py-0.5 text-[11px] text-muted-foreground"
               >
                 {t}
               </span>
@@ -201,7 +201,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 href={project.link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] px-3 py-1.5 text-xs ring-1 ring-white/10 hover:ring-[--neon]/40 hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/[5/100] px-3 py-1.5 text-xs ring-1 ring-white/10 hover:ring-[--neon]/40 hover:text-foreground"
               >
                 <Github size={13} /> Code
               </a>
@@ -277,7 +277,7 @@ export function Skills() {
               whileHover={{ y: -4 }}
               className="glass group relative overflow-hidden rounded-3xl p-6 bg-[#0b0f19]/40 border border-white/[0.03] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-[#0b0f19]/70 hover:shadow-[0_0_30px_rgba(16,185,129,0.2),inset_0_1px_15px_rgba(16,185,129,0.25)]"
             >
-              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${g.accent}`} />
+              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br-${g.accent}`} />
               <div className="relative">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-[0.25em] text-[--neon]">{g.level}</span>
@@ -288,7 +288,7 @@ export function Skills() {
                   {g.items.map((s) => (
                     <span
                       key={s}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-foreground/85"
+                      className="rounded-full border border-white/10 bg-white/[4/100] px-3 py-1 text-xs text-foreground/85"
                     >
                       {s}
                     </span>
@@ -344,7 +344,7 @@ export function Education() {
             <p className="mt-2 text-muted-foreground">Bahria University · Pakistan</p>
             <div className="mt-6 inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-1.5 text-xs">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[--neon]" />
-              2022 — June 2026 · Ongoing
+              2022 — June 2026
             </div>
             <p className="mt-6 max-w-md text-sm text-muted-foreground">
               Core curriculum across systems engineering, signal processing, and software architecture —
